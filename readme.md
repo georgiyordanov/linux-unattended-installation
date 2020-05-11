@@ -40,7 +40,7 @@ The script `build-disk.sh` is not supported on Mac.
 You can run the `build-iso.sh` script as regular user. No root permissions required.
 
 ```sh
-./ubuntu/<VERSION>/build-iso.sh <ssh-public-key-file> <target-iso-file> <hostname>
+./ubuntu/<VERSION>/build-iso.sh <ssh-public-key-file> <target-iso-file> <hostname> <ip address> <netmask> <default gateway> <dns servers>
 ```
 
 All parameters are optional.
@@ -50,6 +50,10 @@ All parameters are optional.
 | `<ssh-public-key-file>` | The ssh public key to be placed in authorized_keys | `$HOME/.ssh/id_rsa.pub` |
 | `<target-iso-file>` | The path of the ISO image created by this script | `ubuntu-<VERSION>-netboot-amd64-unattended.iso` |
 | `<hostname>` | Static network configuration - hostname | `ubuntu-machine` |
+| `<ip address>` | Static network configuration - IP address | `192.168.1.100` |
+| `<netmask>` | Static network configuration - network mask | `255.255.255.0` |
+| `<default gateway>` | Static network configuration - default gateway | `192.168.1.1` |
+| `<dns servers>` | Static network configuration - dns servers | `192.168.1.1 192.168.1.2` |
 
 Boot the created ISO image on the target VM or physical machine. Be aware the setup will start within 10 seconds automatically and will reset the disk of the target device completely. The setup tries to eject the ISO/CD during its final stage. It usually works on physical machines, and it works on VirtualBox. It might not function in certain KVM environments in case the managing environment is not aware of the *eject event*. In that case, you have to detach the ISO image manually to prevent an unintended reinstall.
 

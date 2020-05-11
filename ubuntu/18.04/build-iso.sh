@@ -10,6 +10,10 @@ set -e
 SSH_PUBLIC_KEY_FILE=${1:-"$HOME/.ssh/id_rsa.pub"}
 TARGET_ISO=${2:-"`pwd`/ubuntu-18.04-netboot-amd64-unattended.iso"}
 NETCFG_HOSTNAME=${3:-"ubuntu-machine"}
+NETCFG_IPADDR=${4:-"192.168.1.100"}
+NETCFG_MASK=${5:-"255.255.255.0"}
+NETCFG_GATEWAY=${6:-"192.168.1.1"}
+NETCFG_DNS=${7:-"192.168.1.1 192.168.1.2"}
 
 # check if ssh key exists
 if [ ! -f "$SSH_PUBLIC_KEY_FILE" ];
@@ -50,6 +54,10 @@ PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
 sed -E -i "\
   s/^d-i netcfg\\/hostname string replace$/d-i netcfg\\/hostname string $NETCFG_HOSTNAME/; \
   s/^d-i netcfg\\/get_hostname string replace$/d-i netcfg\\/get_hostname string $NETCFG_HOSTNAME/; \
+  s/^d-i netcfg\\/get_ipaddress string replace$/d-i netcfg\\/get_ipaddress string $NETCFG_IPADDR/; \
+  s/^d-i netcfg\\/get_netmask string replace$/d-i netcfg\\/get_netmask string $NETCFG_MASK/; \
+  s/^d-i netcfg\\/get_gateway string replace$/d-i netcfg\\/get_gateway string $NETCFG_GATEWAY/; \
+  s/^d-i netcfg\\/get_nameservers string replace$/d-i netcfg\\/get_nameservers string $NETCFG_DNS/; \
 " "./preseed.cfg"
 
 # append assets to initrd image
