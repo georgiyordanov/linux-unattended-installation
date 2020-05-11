@@ -29,7 +29,7 @@ Run `sudo apt-get install qemu-utils qemu-kvm` in addition to install software t
 
 #### Mac (Ubuntu 18.04 LTS only)
 
-Run `brew install p7zip xorriso wget dos2unix fakeroot core-process/gnucpio/gnucpio` to install software tools required by the `build-iso.sh` script.
+Run `brew install gnu-sed p7zip xorriso wget dos2unix fakeroot core-process/gnucpio/gnucpio` to install software tools required by the `build-iso.sh` script.
 
 The script `build-disk.sh` is not supported on Mac.
 
@@ -40,7 +40,7 @@ The script `build-disk.sh` is not supported on Mac.
 You can run the `build-iso.sh` script as regular user. No root permissions required.
 
 ```sh
-./ubuntu/<VERSION>/build-iso.sh <ssh-public-key-file> <target-iso-file>
+./ubuntu/<VERSION>/build-iso.sh <ssh-public-key-file> <target-iso-file> <hostname>
 ```
 
 All parameters are optional.
@@ -49,6 +49,7 @@ All parameters are optional.
 | :--- | :--- | :--- |
 | `<ssh-public-key-file>` | The ssh public key to be placed in authorized_keys | `$HOME/.ssh/id_rsa.pub` |
 | `<target-iso-file>` | The path of the ISO image created by this script | `ubuntu-<VERSION>-netboot-amd64-unattended.iso` |
+| `<hostname>` | Static network configuration - hostname | `ubuntu-machine` |
 
 Boot the created ISO image on the target VM or physical machine. Be aware the setup will start within 10 seconds automatically and will reset the disk of the target device completely. The setup tries to eject the ISO/CD during its final stage. It usually works on physical machines, and it works on VirtualBox. It might not function in certain KVM environments in case the managing environment is not aware of the *eject event*. In that case, you have to detach the ISO image manually to prevent an unintended reinstall.
 

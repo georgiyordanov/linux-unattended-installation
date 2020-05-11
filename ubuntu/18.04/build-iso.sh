@@ -9,6 +9,7 @@ set -e
 # get parameters
 SSH_PUBLIC_KEY_FILE=${1:-"$HOME/.ssh/id_rsa.pub"}
 TARGET_ISO=${2:-"`pwd`/ubuntu-18.04-netboot-amd64-unattended.iso"}
+NETCFG_HOSTNAME=${3:-"ubuntu-machine"}
 
 # check if ssh key exists
 if [ ! -f "$SSH_PUBLIC_KEY_FILE" ];
@@ -41,6 +42,15 @@ mkdir "./custom"
 cp "$SCRIPT_DIR/custom/preseed.cfg" "./preseed.cfg"
 cp "$SSH_PUBLIC_KEY_FILE" "./custom/userkey.pub"
 cp "$SCRIPT_DIR/custom/ssh-host-keygen.service" "./custom/ssh-host-keygen.service"
+
+# replace macos sed with GNU sed
+PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+
+#configure network settings in preseed file
+sed -E -i "\
+  s/^d-i netcfg\\/hostname string replace$/d-i netcfg\\/hostname string $NETCFG_HOSTNAME/; \
+  s/^d-i netcfg\\/get_hostname string replace$/d-i netcfg\\/get_hostname string $NETCFG_HOSTNAME/; \
+" "./preseed.cfg"
 
 # append assets to initrd image
 cd "$TMP_INITRD_DIR"
